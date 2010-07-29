@@ -26,6 +26,7 @@ use warnings;
         my $self = &instance_method;
         confess("Odd number of parameters for hash") if @_ % 2 == 1;
         my %args = @_;
+        $self->{_FH} = \*STDERR;
         $self->{ keys %args } = values %args;
         return $self;
     }
@@ -36,16 +37,9 @@ use warnings;
         print $fh @_;
     }
 
-    sub output_to {
-        &instance_method;
-        my $self = shift;
-        $self->set_output_fh(shift);
-        return $self->output(@_);
-    }
-
     sub get_output_fh {
         my $self = &instance_method;
-        return $self->{_FH} || $self->_set_default_output_fh();
+        return $self->{_FH};
     }
 
     sub set_output_fh {
@@ -53,11 +47,6 @@ use warnings;
         confess("No parameter specified") unless @_;
         $self->{_FH} = $_[0];
         return $self->{_FH};
-    }
-
-    sub _set_default_output_fh {
-        my $self = &instance_method;
-        $self->{_FH} = \*STDERR;
     }
 
     sub DESTROY {
