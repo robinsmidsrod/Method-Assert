@@ -13,41 +13,22 @@ sub import {
     confess("Importing into package 'main' makes no sense") if $package eq 'main';
 
     my $class_method = sub {
-        confess("Not called as a class method") if @_ == 0;
-        if ( wantarray ) {
-            # list context
-            confess("Not called as a class method") if blessed( $_[0] );
-            return @_;
-        }
-        elsif ( defined wantarray ) {
-            # scalar context
-            my $first = shift;
-            confess("Not called as a class method") if blessed( $first );
-            return $first;
-        }
-        else {
-            # void context
-            confess("Not called as a class method") if blessed( $_[0] );
-        }
+        confess("Method invoked as a function")                       if     @_ == 0;
+        confess("Class method invoked as an instance method")         if     blessed( $_[0] );
+        confess("Invocant is a reference, not a simple scalar value") if     ref($_[0]);
+        confess("Invocant '$_[0]' is not a subclass of '$package'")   unless $_[0]->isa($package);
+        return @_    if wantarray;         # list   context
+        return shift if defined wantarray; # scalar context
+        return;                            # void   context
     };
 
     my $instance_method = sub {
-        confess("Not called as an instance method") if @_ == 0;
-        if ( wantarray ) {
-            # list context
-            confess("Not called as an instance method") unless blessed( $_[0] );
-            return @_;
-        }
-        elsif ( defined wantarray ) {
-            # scalar context
-            my $first = shift;
-            confess("Not called as an instance method") unless blessed( $first );
-            return $first;
-        }
-        else {
-            # void context
-            confess("Not called as an instance method") unless blessed( $_[0] );
-        }
+        confess("Method invoked as a function")                                           if     @_ == 0;
+        confess("Method not invoked as an instance method")                               unless blessed( $_[0] );
+        confess("Invocant of class '" . ref($_[0]) . "' is not a subclass of '$package'") unless $_[0]->isa($package);
+        return @_    if wantarray;         # list   context
+        return shift if defined wantarray; # scalar context
+        return;                            # void   context
     };
 
     {

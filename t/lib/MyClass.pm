@@ -46,7 +46,7 @@ use warnings;
         my $self = &instance_method;
         confess("No parameter specified") unless @_;
         $self->{_FH} = $_[0];
-        return $self->{_FH};
+        return $self;
     }
 
     sub DESTROY {
