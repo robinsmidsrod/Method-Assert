@@ -13,18 +13,18 @@ sub import {
     my $class_method = sub {
         if ( wantarray ) {
             # list context
-            confess("Not called as an instance method") if blessed( $_[0] );
+            confess("Not called as a class method") if blessed( $_[0] );
             return @_;
         }
         elsif ( defined wantarray ) {
             # scalar context
             my $first = shift;
-            confess("Not called as an instance method") if blessed( $first );
+            confess("Not called as a class method") if blessed( $first );
             return $first;
         }
         else {
             # void context
-            confess("Not called as an instance method") if blessed( $_[0] );
+            confess("Not called as a class method") if blessed( $_[0] );
         }
     };
 
