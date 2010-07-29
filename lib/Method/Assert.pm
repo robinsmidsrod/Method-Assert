@@ -10,6 +10,8 @@ use Carp qw(confess);
 sub import {
     my $package = caller();
 
+    confess("Importing into package 'main' makes no sense") if $package eq 'main';
+
     my $class_method = sub {
         confess("Not called as a class method") if @_ == 0;
         if ( wantarray ) {
