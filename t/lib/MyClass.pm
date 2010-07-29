@@ -57,7 +57,7 @@ use warnings;
 
     sub _set_default_output_fh {
         my $self = &instance_method;
-        $self->{_FH} = \*STDOUT;
+        $self->{_FH} = \*STDERR;
     }
 
     sub DESTROY {

@@ -11,6 +11,7 @@ sub import {
     my $package = caller();
 
     my $class_method = sub {
+        confess("Not called as a class method") if @_ == 0;
         if ( wantarray ) {
             # list context
             confess("Not called as a class method") if blessed( $_[0] );
@@ -29,6 +30,7 @@ sub import {
     };
 
     my $instance_method = sub {
+        confess("Not called as an instance method") if @_ == 0;
         if ( wantarray ) {
             # list context
             confess("Not called as an instance method") unless blessed( $_[0] );
