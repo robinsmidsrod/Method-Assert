@@ -32,7 +32,8 @@ sub import {
     };
 
     {
-        no strict 'refs';
+        # FIXME: Change to use Package::Stash?
+        no strict 'refs'; ## no critic qw(TestingAndDebugging::ProhibitNoStrict)
         *{ $package . '::class_method' } = $class_method;
         *{ $package . '::instance_method' } = $instance_method;
     }
